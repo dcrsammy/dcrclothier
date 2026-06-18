@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DCR Clothier — Lagos</title>
+<meta name="description" content="A curated fashion boutique in Lagos. Dress with intent.">
+<link rel="stylesheet" href="/style.css">
+<style>
+/* ─── HOME-SPECIFIC ─────────────────────────────────── */
+
+/* HERO */
+.hero {
+  height: 100svh;
+  min-height: 600px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+}
+
+.hero-visual {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-visual img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: brightness(0.88);
+}
+
+.hero-visual-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(255,255,255,0.08), transparent);
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 80px 64px;
+  background: var(--off);
+  position: relative;
+}
+
+.hero-content::before {
+  content: 'DCR';
+  position: absolute;
+  top: -20px; right: -40px;
+  font-family: var(--serif);
+  font-size: 200px;
+  font-weight: 300;
+  color: rgba(184,150,46,0.06);
+  pointer-events: none;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.hero-tag {
+  font-size: 9px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hero-tag::before {
+  content: '';
+  width: 24px; height: 1px;
+  background: var(--gold);
+}
+
+.hero-h1 {
+  font-family: var(--serif);
+  font-size: clamp(56px, 6vw, 88px);
+  font-weight: 300;
+  line-height: 1.0;
+  letter-spacing: -0.01em;
+  color: var(--black);
+  margin-bottom: 28px;
+}
+
+.hero-h1 em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero-desc {
+  font-size: 14px;
+  color: var(--mid);
+  line-height: 1.85;
+  max-width: 320px;
+  margin-bottom: 44px;
+  letter-spacing: 0.01em;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 40px; right: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.35;
+}
+
+.hero-scroll span {
+  font-size: 8px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+}
+
+.hero-scroll-line {
+  width: 1px; height: 48px;
+  background: var(--black);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+  0%,100% { transform: scaleY(1); opacity: 0.4; }
+  50% { transform: scaleY(1.15); opacity: 1; }
+}
+
+/* FEATURED STRIP */
+.strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--light);
+  border-bottom: 1px solid var(--light);
+}
+
+.strip-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 32px;
+  border-right: 1px solid var(--light);
+}
+
+.strip-item:last-child { border-right: none; }
+
+.strip-icon {
+  width: 36px; height: 36px;
+  border: 1px solid var(--light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 16px;
+}
+
+.strip-text strong {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--black);
+  margin-bottom: 2px;
+}
+
+.strip-text span {
+  font-size: 11px;
+  color: var(--mid);
+}
+
+/* COLLECTION */
+.collection-section {
+  padding: 96px 48px;
+}
+
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 48px;
+}
+
+.section-head h2 {
+  font-family: var(--serif);
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 300;
+  line-height: 1.05;
+}
+
+.section-head h2 em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.link-arrow {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--black);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+  transition: color var(--transition), gap var(--transition);
+  white-space: nowrap;
+}
+
+.link-arrow:hover { color: var(--gold); gap: 18px; }
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+}
+
+/* FULL-BLEED BANNER */
+.banner {
+  height: 540px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.banner img {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: brightness(0.55);
+}
+
+.banner-content {
+  position: relative;
+  z-index: 1;
+  padding: 0 80px;
+  color: var(--white);
+  max-width: 640px;
+}
+
+.banner-content .eyebrow { color: var(--gold-lt); }
+.banner-content .eyebrow::before { background: var(--gold-lt); }
+
+.banner-content h2 {
+  font-family: var(--serif);
+  font-size: clamp(42px, 5vw, 68px);
+  font-weight: 300;
+  line-height: 1.05;
+  margin-bottom: 24px;
+  color: var(--white);
+}
+
+.banner-content h2 em { color: var(--gold-lt); font-style: italic; }
+
+.banner-content p {
+  font-size: 14px;
+  opacity: 0.75;
+  line-height: 1.8;
+  margin-bottom: 36px;
+  max-width: 360px;
+}
+
+/* CATEGORIES GRID */
+.categories-section {
+  padding: 0 48px 96px;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: 320px 320px;
+  gap: 2px;
+}
+
+.cat-item {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  padding: 24px;
+  background: var(--off);
+  cursor: pointer;
+}
+
+.cat-item:first-child { grid-row: span 2; }
+
+.cat-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.6);
+  transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+
+.cat-item:hover .cat-bg { transform: scale(1.04); }
+
+.cat-content {
+  position: relative;
+  z-index: 1;
+  color: var(--white);
+}
+
+.cat-label {
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold-lt);
+  margin-bottom: 6px;
+}
+
+.cat-name {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1.1;
+}
+
+/* ABOUT STRIP */
+.about-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 500px;
+}
+
+.about-img {
+  position: relative;
+  overflow: hidden;
+}
+
+.about-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+.about-text {
+  background: var(--black);
+  color: var(--white);
+  padding: 80px 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.about-text .eyebrow { color: var(--gold); }
+.about-text .eyebrow::before { background: var(--gold); }
+
+.about-text h2 {
+  font-family: var(--serif);
+  font-size: clamp(36px, 3.5vw, 52px);
+  font-weight: 300;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  color: var(--white);
+}
+
+.about-text h2 em { color: var(--gold); font-style: italic; }
+
+.about-text p {
+  font-size: 14px;
+  line-height: 1.9;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 16px;
+  max-width: 400px;
+}
+
+.about-text p:last-of-type { margin-bottom: 40px; }
+
+/* STORE HOURS */
+.store-section {
+  padding: 96px 48px;
+  background: var(--off);
+}
+
+.store-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.store-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 280px 180px;
+  gap: 2px;
+}
+
+.store-img {
+  background-size: cover;
+  background-position: center;
+  background-color: var(--light);
+}
+
+.store-img:first-child {
+  grid-column: 1 / 3;
+}
+
+.store-info h2 {
+  font-family: var(--serif);
+  font-size: clamp(34px, 3.5vw, 50px);
+  font-weight: 300;
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+
+.store-info h2 em { font-style: italic; color: var(--gold); }
+
+.store-info p {
+  font-size: 14px;
+  color: var(--mid);
+  line-height: 1.85;
+  margin-bottom: 36px;
+  max-width: 400px;
+}
+
+.store-details-list {
+  list-style: none;
+  margin-bottom: 40px;
+}
+
+.store-details-list li {
+  display: flex;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--light);
+  font-size: 13px;
+}
+
+.store-details-list li:first-child { border-top: 1px solid var(--light); }
+
+.detail-label {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  min-width: 80px;
+  padding-top: 2px;
+}
+
+.detail-val { color: var(--dark); line-height: 1.6; }
+
+/* NEWSLETTER */
+.newsletter-section {
+  background: var(--black);
+  padding: 80px 48px;
+  text-align: center;
+}
+
+.newsletter-section h2 {
+  font-family: var(--serif);
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 300;
+  color: var(--white);
+  margin-bottom: 12px;
+}
+
+.newsletter-section h2 em { color: var(--gold); font-style: italic; }
+
+.newsletter-section p {
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.05em;
+  margin-bottom: 36px;
+}
+
+.newsletter-form {
+  display: flex;
+  max-width: 460px;
+  margin: 0 auto;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.04);
+}
+
+.newsletter-form input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 16px 20px;
+  font-size: 13px;
+  color: var(--white);
+  letter-spacing: 0.03em;
+}
+
+.newsletter-form input::placeholder { color: rgba(255,255,255,0.25); }
+
+.newsletter-form button {
+  background: var(--gold);
+  border: none;
+  padding: 16px 28px;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--white);
+  font-weight: 500;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition: background var(--transition);
+  white-space: nowrap;
+}
+
+.newsletter-form button:hover { background: var(--gold-lt); }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .products-grid { grid-template-columns: repeat(2, 1fr); }
+  .categories-grid { grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, 260px); }
+  .categories-grid .cat-item:first-child { grid-column: 1 / 3; grid-row: span 1; }
+}
+
+@media (max-width: 768px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-visual { height: 50vh; }
+  .hero-content { padding: 48px 24px; }
+  .hero-content::before { display: none; }
+  .strip { grid-template-columns: 1fr; }
+  .strip-item { border-right: none; border-bottom: 1px solid var(--light); }
+  .collection-section { padding: 64px 24px; }
+  .categories-section { padding: 0 24px 64px; }
+  .categories-grid { grid-template-columns: 1fr; grid-template-rows: auto; gap: 2px; }
+  .categories-grid .cat-item:first-child { grid-column: 1; }
+  .cat-item { height: 240px; }
+  .about-section { grid-template-columns: 1fr; }
+  .about-img { height: 300px; }
+  .about-text { padding: 48px 24px; }
+  .store-inner { grid-template-columns: 1fr; }
+  .store-images { grid-template-rows: 220px 140px; }
+  .store-section { padding: 64px 24px; }
+  .banner { height: 400px; }
+  .banner-content { padding: 0 24px; }
+  .newsletter-section { padding: 64px 24px; }
+  .newsletter-form { flex-direction: column; }
+  .section-head { flex-direction: column; align-items: flex-start; gap: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<!-- HERO -->
+<section class="hero page-top" style="padding-top:0;">
+  <div class="hero-visual">
+    <img
+      src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1200"
+      alt="DCR Clothier Store"
+      id="hero-img"
+    >
+    <div class="hero-visual-overlay"></div>
+  </div>
+  <div class="hero-content">
+    <p class="hero-tag">Lagos · Est. 2024</p>
+    <h1 class="hero-h1">Dress<br>with<br><em>intent.</em></h1>
+    <p class="hero-desc">DCR Clothier is a curated fashion boutique in Lagos. Every piece is sourced and presented with a single standard — no noise, no compromise.</p>
+    <div class="hero-actions">
+      <a href="/shop.html" class="btn btn-dark">Shop the Edit</a>
+      <a href="#about" class="btn btn-outline">Our Story</a>
+    </div>
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </div>
+</section>
+
+<!-- STRIP -->
+<div class="strip">
+  <div class="strip-item">
+    <div class="strip-icon">🚚</div>
+    <div class="strip-text">
+      <strong>Lagos Delivery</strong>
+      <span>Same-day & next-day available</span>
+    </div>
+  </div>
+  <div class="strip-item">
+    <div class="strip-icon">📦</div>
+    <div class="strip-text">
+      <strong>Easy Returns</strong>
+      <span>7-day hassle-free returns</span>
+    </div>
+  </div>
+  <div class="strip-item">
+    <div class="strip-icon">💳</div>
+    <div class="strip-text">
+      <strong>Secure Payment</strong>
+      <span>Paystack — card, transfer & USSD</span>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURED COLLECTION -->
+<section class="collection-section">
+  <div class="section-head">
+    <div>
+      <div class="eyebrow">Current Drop</div>
+      <h2>The <em>Edit</em> — SS 2026</h2>
+    </div>
+    <a href="/shop.html" class="link-arrow">All Pieces →</a>
+  </div>
+  <div class="products-grid" id="featured-products">
+    <!-- loaded by JS -->
+    <div style="grid-column:1/-1;padding:60px;text-align:center;color:var(--mid);font-size:13px;">Loading collection…</div>
+  </div>
+</section>
+
+<!-- BANNER -->
+<div class="banner">
+  <img
+    src="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=1600"
+    alt="DCR Clothier"
+    loading="lazy"
+  >
+  <div class="banner-content">
+    <div class="eyebrow">New Season</div>
+    <h2>Built for<br>the <em>deliberate</em><br>dresser.</h2>
+    <p>Statement pieces for people who know exactly what they're doing. Shop the new season edit now.</p>
+    <a href="/shop.html" class="btn btn-gold">Shop Now</a>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="categories-section" style="padding-top:2px;">
+  <div class="categories-grid">
+    <a href="/shop.html?cat=outerwear" class="cat-item">
+      <div class="cat-bg" style="background-image:url('https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=900')"></div>
+      <div class="cat-content">
+        <div class="cat-label">Category</div>
+        <div class="cat-name">Outerwear</div>
+      </div>
+    </a>
+    <a href="/shop.html?cat=tops" class="cat-item">
+      <div class="cat-bg" style="background-image:url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=700')"></div>
+      <div class="cat-content">
+        <div class="cat-label">Category</div>
+        <div class="cat-name">Tops</div>
+      </div>
+    </a>
+    <a href="/shop.html?cat=bottoms" class="cat-item">
+      <div class="cat-bg" style="background-image:url('https://images.unsplash.com/photo-1509631179647-0177331693ae?w=700')"></div>
+      <div class="cat-content">
+        <div class="cat-label">Category</div>
+        <div class="cat-name">Bottoms</div>
+      </div>
+    </a>
+    <a href="/shop.html?cat=accessories" class="cat-item">
+      <div class="cat-bg" style="background-image:url('https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=700')"></div>
+      <div class="cat-content">
+        <div class="cat-label">Category</div>
+        <div class="cat-name">Accessories</div>
+      </div>
+    </a>
+    <a href="/shop.html?cat=sets" class="cat-item">
+      <div class="cat-bg" style="background-image:url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=700')"></div>
+      <div class="cat-content">
+        <div class="cat-label">Category</div>
+        <div class="cat-name">Sets</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div class="about-img">
+    <img
+      src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=900"
+      alt="DCR Clothier Store Interior"
+      loading="lazy"
+    >
+  </div>
+  <div class="about-text">
+    <div class="eyebrow">Our Story</div>
+    <h2>Built in <em>Lagos.</em><br>Worn everywhere.</h2>
+    <p>DCR Clothier is a Lagos-based fashion boutique rooted in the belief that what you wear should say something — without trying too hard.</p>
+    <p>From the brass racks to the black-draped fitting rooms, the store is an experience before it's a transaction. We built it that way.</p>
+    <a href="/shop.html" class="btn btn-outline-gold">Explore the Store</a>
+  </div>
+</section>
+
+<!-- STORE INFO -->
+<section class="store-section" id="store">
+  <div class="store-inner">
+    <div class="store-images">
+      <div class="store-img" style="background-image:url('https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=900')"></div>
+      <div class="store-img" style="background-image:url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500')"></div>
+      <div class="store-img" style="background-image:url('https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=500')"></div>
+    </div>
+    <div class="store-info">
+      <div class="eyebrow">Visit Us</div>
+      <h2>The <em>Flagship</em><br>Experience</h2>
+      <p>The DCR Clothier store isn't just retail — it's a mood. White walls, steel-frame glass doors, gold hardware. Come in and take your time.</p>
+      <ul class="store-details-list">
+        <li>
+          <span class="detail-label">Location</span>
+          <span class="detail-val">Lagos, Nigeria<br><small style="opacity:0.6;">Address on request via DM</small></span>
+        </li>
+        <li>
+          <span class="detail-label">Hours</span>
+          <span class="detail-val">Mon – Sat: 11am – 8pm<br>Sunday: 12pm – 6pm</span>
+        </li>
+        <li>
+          <span class="detail-label">Contact</span>
+          <span class="detail-val">@dcrclothier · WhatsApp available</span>
+        </li>
+      </ul>
+      <a href="#" class="btn btn-dark">Get Directions</a>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<div class="newsletter-section">
+  <div class="eyebrow" style="justify-content:center;">Stay in the Loop</div>
+  <h2>First access to <em>every drop.</em></h2>
+  <p>No spam. Just new arrivals, exclusive releases, and store news.</p>
+  <div class="newsletter-form">
+    <input type="email" id="sub-email" placeholder="Your email address">
+    <button id="sub-btn">Join</button>
+  </div>
+</div>
+
+<div id="footer-mount"></div>
+
+<script src="/app.js"></script>
+<script>
+  // Render nav + footer
+  document.getElementById('nav-mount').innerHTML = renderNav('home');
+  document.getElementById('footer-mount').innerHTML = renderFooter();
+
+  // Load featured products
+  async function loadFeatured() {
+    try {
+      const res = await fetch(`${API}/products?featured=true&limit=4`);
+      const data = await res.json();
+      const grid = document.getElementById('featured-products');
+      if (!data.products?.length) {
+        grid.innerHTML = '<div style="grid-column:1/-1;padding:60px;text-align:center;color:var(--mid)">No products yet.</div>';
+        return;
+      }
+      grid.innerHTML = data.products.map(productCardHTML).join('');
+    } catch (e) {
+      document.getElementById('featured-products').innerHTML =
+        '<div style="grid-column:1/-1;padding:60px;text-align:center;color:var(--mid)">Unable to load products.</div>';
+    }
+  }
+
+  // Newsletter
+  document.getElementById('sub-btn').addEventListener('click', async () => {
+    const email = document.getElementById('sub-email').value.trim();
+    if (!email) return showToast('Enter your email address');
+    try {
+      await fetch(`${API}/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      showToast('You\'re on the list ✓');
+      document.getElementById('sub-email').value = '';
+    } catch { showToast('Something went wrong'); }
+  });
+
+  loadFeatured();
+</script>
+</body>
+</html>

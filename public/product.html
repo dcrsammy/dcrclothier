@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product — DCR Clothier</title>
+<link rel="stylesheet" href="/style.css">
+<style>
+.product-page {
+  padding-top: 64px;
+  min-height: 100vh;
+}
+
+.product-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: calc(100vh - 64px);
+}
+
+/* GALLERY */
+.product-gallery {
+  position: sticky;
+  top: 64px;
+  height: calc(100vh - 64px);
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 2px;
+  background: var(--off);
+}
+
+.gallery-thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+  background: var(--light);
+}
+
+.gallery-thumb {
+  width: 72px;
+  aspect-ratio: 1;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity var(--transition);
+  flex-shrink: 0;
+}
+
+.gallery-thumb.active { opacity: 1; }
+
+.gallery-main {
+  position: relative;
+  overflow: hidden;
+}
+
+.gallery-main-img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.gallery-main:hover .gallery-main-img { transform: scale(1.03); }
+
+/* PRODUCT INFO */
+.product-info {
+  padding: 56px 56px 56px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-breadcrumb {
+  display: flex;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--mid);
+  margin-bottom: 28px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.product-breadcrumb a { transition: color var(--transition); }
+.product-breadcrumb a:hover { color: var(--gold); }
+.product-breadcrumb span { opacity: 0.4; }
+
+.product-category {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+
+.product-name {
+  font-family: var(--serif);
+  font-size: clamp(32px, 3.5vw, 48px);
+  font-weight: 300;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+
+.product-price-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.product-price {
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--black);
+}
+
+.product-compare {
+  font-size: 16px;
+  color: var(--mid);
+  text-decoration: line-through;
+}
+
+.product-desc {
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--mid);
+  margin-bottom: 36px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid var(--light);
+}
+
+/* SIZE SELECTOR */
+.size-label {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dark);
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.size-label a {
+  color: var(--gold);
+  font-size: 10px;
+}
+
+.size-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.size-btn {
+  min-width: 52px;
+  padding: 10px 14px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  background: var(--off);
+  border: 1px solid var(--light);
+  color: var(--dark);
+  cursor: pointer;
+  transition: all var(--transition);
+  text-align: center;
+  font-family: var(--sans);
+}
+
+.size-btn:hover {
+  border-color: var(--black);
+  background: var(--white);
+}
+
+.size-btn.selected {
+  background: var(--black);
+  border-color: var(--black);
+  color: var(--white);
+}
+
+.size-btn.oos {
+  opacity: 0.3;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+/* QTY */
+.qty-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.qty-label {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dark);
+  min-width: 80px;
+}
+
+.qty-ctrl {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--light);
+}
+
+.qty-btn {
+  width: 40px; height: 40px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: var(--dark);
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.qty-btn:hover { background: var(--off); }
+
+.qty-num {
+  width: 44px;
+  text-align: center;
+  font-size: 14px;
+  border-left: 1px solid var(--light);
+  border-right: 1px solid var(--light);
+  line-height: 40px;
+}
+
+/* ADD TO CART */
+.atc-wrap {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.btn-atc {
+  flex: 1;
+  padding: 17px;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-family: var(--sans);
+  background: var(--black);
+  color: var(--white);
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.btn-atc:hover { background: var(--dark); }
+.btn-atc:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-wishlist {
+  width: 54px;
+  background: var(--off);
+  border: 1px solid var(--light);
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+
+.btn-wishlist:hover { border-color: var(--black); background: var(--white); }
+
+/* ACCORDION */
+.accordion {
+  border-top: 1px solid var(--light);
+  margin-top: 8px;
+}
+
+.accordion-item {
+  border-bottom: 1px solid var(--light);
+}
+
+.accordion-trigger {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+  background: none;
+  border: none;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--dark);
+  cursor: pointer;
+  font-family: var(--sans);
+  font-weight: 500;
+}
+
+.accordion-icon {
+  font-size: 20px;
+  font-weight: 300;
+  transition: transform 0.3s;
+}
+
+.accordion-item.open .accordion-icon { transform: rotate(45deg); }
+
+.accordion-body {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--mid);
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.4s ease, padding 0.3s;
+  padding: 0;
+}
+
+.accordion-item.open .accordion-body {
+  max-height: 300px;
+  padding-bottom: 20px;
+}
+
+/* RELATED */
+.related-section {
+  padding: 80px 48px;
+  background: var(--off);
+}
+
+.related-section h2 {
+  font-family: var(--serif);
+  font-size: 36px;
+  font-weight: 300;
+  margin-bottom: 40px;
+}
+
+.related-section h2 em { font-style: italic; color: var(--gold); }
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+}
+
+@media (max-width: 900px) {
+  .product-layout { grid-template-columns: 1fr; }
+  .product-gallery {
+    position: static;
+    height: 60vw;
+    min-height: 320px;
+  }
+  .gallery-thumbs { display: none; }
+  .product-gallery { grid-template-columns: 1fr; }
+  .product-info { padding: 32px 24px; }
+  .related-grid { grid-template-columns: 1fr 1fr; }
+  .related-section { padding: 56px 24px; }
+}
+</style>
+</head>
+<body>
+<div id="nav-mount"></div>
+
+<div class="product-page">
+  <div id="product-container">
+    <div style="text-align:center;padding:120px 48px;color:var(--mid);">Loading product…</div>
+  </div>
+</div>
+
+<div id="footer-mount"></div>
+
+<script src="/app.js"></script>
+<script>
+document.getElementById('nav-mount').innerHTML = renderNav('shop');
+document.getElementById('footer-mount').innerHTML = renderFooter();
+
+const params = new URLSearchParams(window.location.search);
+const slug = params.get('slug');
+let selectedSize = '';
+let quantity = 1;
+let product = null;
+
+async function loadProduct() {
+  if (!slug) {
+    document.getElementById('product-container').innerHTML =
+      '<div style="text-align:center;padding:120px;color:var(--mid)">Product not found.</div>';
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/products/${slug}`);
+    if (!res.ok) throw new Error('Not found');
+    product = await res.json();
+
+    document.title = `${product.name} — DCR Clothier`;
+    renderProduct(product);
+    loadRelated(product.category, product.id);
+  } catch (e) {
+    document.getElementById('product-container').innerHTML =
+      '<div style="text-align:center;padding:120px;color:var(--mid)">Product not found. <a href="/shop.html" style="color:var(--gold)">Back to shop →</a></div>';
+  }
+}
+
+function renderProduct(p) {
+  const imgs = p.images?.length ? p.images : ['https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=900'];
+  const stock = p.stock || {};
+  const sizes = p.sizes || [];
+
+  const sizeHTML = sizes.map(s => {
+    const inStock = stock[s] > 0;
+    return `<button class="size-btn${!inStock ? ' oos' : ''}" data-size="${s}" ${!inStock ? 'disabled' : ''}>${s}</button>`;
+  }).join('');
+
+  const thumbHTML = imgs.map((img, i) =>
+    `<div class="gallery-thumb${i===0?' active':''}" data-img="${img}" style="background-image:url('${img}')"></div>`
+  ).join('');
+
+  document.getElementById('product-container').innerHTML = `
+    <div class="product-layout">
+      <div class="product-gallery">
+        <div class="gallery-thumbs">${thumbHTML}</div>
+        <div class="gallery-main">
+          <img class="gallery-main-img" id="main-img" src="${imgs[0]}" alt="${p.name}">
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-breadcrumb">
+          <a href="/index.html">Home</a><span>/</span>
+          <a href="/shop.html">Shop</a><span>/</span>
+          <a href="/shop.html?cat=${p.category}">${p.category}</a><span>/</span>
+          <span style="color:var(--dark);opacity:1;">${p.name}</span>
+        </div>
+        <div class="product-category">${p.category} · ${p.gender}</div>
+        <h1 class="product-name">${p.name}</h1>
+        <div class="product-price-wrap">
+          <span class="product-price">${formatPrice(p.price)}</span>
+          ${p.compare_price ? `<span class="product-compare">${formatPrice(p.compare_price)}</span>` : ''}
+        </div>
+        <p class="product-desc">${p.description || 'No description available.'}</p>
+
+        ${sizes.length ? `
+        <div class="size-label">
+          <span>Size</span>
+          <a href="#">Size Guide</a>
+        </div>
+        <div class="size-grid" id="size-grid">${sizeHTML}</div>` : ''}
+
+        <div class="qty-row">
+          <span class="qty-label">Quantity</span>
+          <div class="qty-ctrl">
+            <button class="qty-btn" id="qty-minus">−</button>
+            <div class="qty-num" id="qty-display">1</div>
+            <button class="qty-btn" id="qty-plus">+</button>
+          </div>
+        </div>
+
+        <div class="atc-wrap">
+          <button class="btn-atc" id="atc-btn" ${sizes.length ? 'disabled' : ''}>
+            ${sizes.length ? 'Select a Size' : 'Add to Bag'}
+          </button>
+          <button class="btn-wishlist" title="Save">♡</button>
+        </div>
+
+        <div class="accordion">
+          <div class="accordion-item">
+            <button class="accordion-trigger">
+              <span>Details & Care</span>
+              <span class="accordion-icon">+</span>
+            </button>
+            <div class="accordion-body">
+              Premium quality construction. Refer to care label before washing. We recommend dry clean or hand wash cold for best results.
+            </div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-trigger">
+              <span>Delivery & Returns</span>
+              <span class="accordion-icon">+</span>
+            </button>
+            <div class="accordion-body">
+              Same-day delivery available within Lagos (order before 12pm). Nationwide delivery 2–5 business days. 7-day returns on unworn items in original condition.
+            </div>
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-trigger">
+              <span>Contact Us</span>
+              <span class="accordion-icon">+</span>
+            </button>
+            <div class="accordion-body">
+              Questions about this piece? DM us on Instagram @dcrclothier or reach us on WhatsApp. We're available Mon–Sat 11am–8pm.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  bindProductEvents();
+}
+
+function bindProductEvents() {
+  // Thumbnails
+  document.querySelectorAll('.gallery-thumb').forEach(thumb => {
+    thumb.addEventListener('click', () => {
+      document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+      document.getElementById('main-img').src = thumb.dataset.img;
+    });
+  });
+
+  // Sizes
+  document.querySelectorAll('.size-btn:not(.oos)').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedSize = btn.dataset.size;
+      const atc = document.getElementById('atc-btn');
+      atc.disabled = false;
+      atc.textContent = 'Add to Bag';
+    });
+  });
+
+  // Qty
+  document.getElementById('qty-minus').addEventListener('click', () => {
+    if (quantity > 1) { quantity--; document.getElementById('qty-display').textContent = quantity; }
+  });
+  document.getElementById('qty-plus').addEventListener('click', () => {
+    quantity++; document.getElementById('qty-display').textContent = quantity;
+  });
+
+  // Add to cart
+  document.getElementById('atc-btn').addEventListener('click', () => {
+    if (!selectedSize && product.sizes?.length) { showToast('Please select a size'); return; }
+    Cart.add(product, selectedSize || 'One Size', quantity);
+  });
+
+  // Accordion
+  document.querySelectorAll('.accordion-trigger').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.accordion-item');
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+}
+
+async function loadRelated(category, excludeId) {
+  try {
+    const res = await fetch(`${API}/products?category=${category}&limit=4`);
+    const data = await res.json();
+    const related = (data.products || []).filter(p => p.id !== excludeId).slice(0, 4);
+    if (!related.length) return;
+
+    const sec = document.createElement('section');
+    sec.className = 'related-section';
+    sec.innerHTML = `
+      <h2>You might also <em>like</em></h2>
+      <div class="related-grid">${related.map(productCardHTML).join('')}</div>
+    `;
+    document.querySelector('.product-page').appendChild(sec);
+  } catch(e) {}
+}
+
+loadProduct();
+</script>
+</body>
+</html>
