@@ -403,8 +403,9 @@ input,select,textarea { font-family:var(--sans); }
 
 <div class="toast" id="toast"></div>
 
+<script src="/config.js"></script>
+<script src="/app.js"></script>
 <script>
-const API = window.location.hostname === 'localhost' ? 'http://localhost:3000/api' : '/api';
 let adminToken = '';
 
 function toast(msg, dur=3000) {
@@ -541,11 +542,14 @@ async function updateOrderStatus(id, status) {
 async function loadSubs() {
   const body = document.getElementById('subs-body');
   try {
-    const r = await fetch(`${API}/admin/stats`, H());
-    const stats = await r.json();
-    document.getElementById('sub-count-label').textContent = `${stats.subscribers || 0} Subscribers`;
-    body.innerHTML = '<tr><td colspan="2" style="text-align:center;padding:32px;color:rgba(255,255,255,0.25)">Subscriber list requires direct Supabase access.</td></tr>';
-  } catch(e) {}
+    const { data } = await new SupabaseQuery(SUPABASE_URL, SUPABASE_SERVICE_KEY, 'subscribers')
+      .select('*').eq('active', true).order('created_at', { ascending: false });
+    const subs = data || [];
+    document.getElementById('sub-count-label').textContent = `${subs.length} Subscribers`;
+    body.innerHTML = subs.length
+      ? subs.map(s => `<tr><td>${s.email}</td><td style="color:rgba(255,255,255,0.4)">${fmtDate(s.created_at)}</td></tr>`).join('')
+      : '<tr><td colspan="2" style="text-align:center;padding:32px;color:rgba(255,255,255,0.25)">No subscribers yet.</td></tr>';
+  } catch(e) { toast('Failed to load subscribers'); }
 }
 
 // PRODUCT MODAL
