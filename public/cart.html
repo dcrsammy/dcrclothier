@@ -5,455 +5,177 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Your Bag — DCR Clothier</title>
 <link rel="stylesheet" href="/style.css">
+<script src="https://js.paystack.co/v1/inline.js"></script>
 <style>
-.cart-page {
-  padding-top: 64px;
-  min-height: 100vh;
-  background: var(--off);
-}
-
-.cart-header {
-  background: var(--white);
-  padding: 40px 48px 32px;
-  border-bottom: 1px solid var(--light);
-}
-
-.cart-header h1 {
-  font-family: var(--serif);
-  font-size: 40px;
-  font-weight: 300;
-}
-
-.cart-header h1 em { font-style: italic; color: var(--gold); }
-
-.cart-layout {
-  display: grid;
-  grid-template-columns: 1fr 380px;
-  gap: 2px;
-  min-height: 60vh;
-}
-
-/* ITEMS */
-.cart-items {
-  background: var(--white);
-  padding: 0;
-}
-
-.cart-item {
-  display: grid;
-  grid-template-columns: 100px 1fr auto;
-  gap: 20px;
-  padding: 28px 48px;
-  border-bottom: 1px solid var(--light);
-  align-items: start;
-}
-
-.cart-item-img {
-  width: 100px;
-  aspect-ratio: 3/4;
-  object-fit: cover;
-  background: var(--off);
-}
-
-.cart-item-name {
-  font-family: var(--serif);
-  font-size: 20px;
-  font-weight: 400;
-  margin-bottom: 6px;
-  line-height: 1.2;
-}
-
-.cart-item-meta {
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--mid);
-  margin-bottom: 16px;
-}
-
-.cart-item-qty {
-  display: flex;
-  align-items: center;
-  border: 1px solid var(--light);
-  width: fit-content;
-}
-
-.ciq-btn {
-  width: 36px; height: 36px;
-  background: none;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  color: var(--dark);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background var(--transition);
-}
-
-.ciq-btn:hover { background: var(--off); }
-
-.ciq-num {
-  width: 36px;
-  text-align: center;
-  font-size: 13px;
-  border-left: 1px solid var(--light);
-  border-right: 1px solid var(--light);
-  line-height: 36px;
-}
-
-.cart-item-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 12px;
-}
-
-.cart-item-price {
-  font-size: 16px;
-  font-weight: 500;
-}
-
-.cart-remove {
-  background: none;
-  border: none;
-  font-size: 11px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--mid);
-  cursor: pointer;
-  transition: color var(--transition);
-  font-family: var(--sans);
-}
-
-.cart-remove:hover { color: var(--black); }
-
-/* EMPTY */
-.cart-empty {
-  padding: 100px 48px;
-  text-align: center;
-}
-
-.cart-empty h2 {
-  font-family: var(--serif);
-  font-size: 36px;
-  font-weight: 300;
-  margin-bottom: 12px;
-}
-
-.cart-empty p {
-  font-size: 14px;
-  color: var(--mid);
-  margin-bottom: 32px;
-}
-
-/* CHECKOUT PANEL */
-.checkout-panel {
-  background: var(--black);
-  color: var(--white);
-  padding: 40px 36px;
-  position: sticky;
-  top: 64px;
-  height: fit-content;
-}
-
-.checkout-panel h2 {
-  font-family: var(--serif);
-  font-size: 24px;
-  font-weight: 300;
-  margin-bottom: 32px;
-  color: var(--white);
-}
-
-.summary-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  color: rgba(255,255,255,0.6);
-  margin-bottom: 14px;
-}
-
-.summary-total {
-  display: flex;
-  justify-content: space-between;
-  font-size: 20px;
-  color: var(--white);
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255,255,255,0.12);
-  margin-bottom: 32px;
-}
-
-/* CHECKOUT FORM */
-.checkout-form {
-  display: none;
-  flex-direction: column;
-  gap: 0;
-}
-
-.checkout-form.visible { display: flex; }
-
-.form-section-title {
-  font-size: 9px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 16px;
-  margin-top: 24px;
-}
-
-.form-field {
-  margin-bottom: 12px;
-}
-
-.form-field label {
-  display: block;
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.5);
-  margin-bottom: 6px;
-}
-
-.form-field input,
-.form-field select,
-.form-field textarea {
-  width: 100%;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
-  padding: 12px 14px;
-  font-size: 13px;
-  color: var(--white);
-  outline: none;
-  font-family: var(--sans);
-  transition: border-color var(--transition);
-}
-
-.form-field input::placeholder,
-.form-field textarea::placeholder { color: rgba(255,255,255,0.25); }
-
-.form-field input:focus,
-.form-field textarea:focus { border-color: var(--gold); }
-
-.form-field select { cursor: pointer; }
-.form-field select option { background: var(--black); color: var(--white); }
-
-.checkout-btn-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.btn-proceed {
-  width: 100%;
-  padding: 17px;
-  background: var(--gold);
-  color: var(--white);
-  border: none;
-  font-size: 11px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  font-weight: 500;
-  font-family: var(--sans);
-  cursor: pointer;
-  transition: background var(--transition);
-}
-
-.btn-proceed:hover { background: var(--gold-lt); }
-.btn-proceed:disabled { opacity: 0.5; cursor: not-allowed; }
-
-.secure-note {
-  font-size: 10px;
-  color: rgba(255,255,255,0.3);
-  text-align: center;
-  letter-spacing: 0.08em;
-  margin-top: 8px;
-}
-
-@media (max-width: 900px) {
-  .cart-layout { grid-template-columns: 1fr; }
-  .cart-header { padding: 32px 24px 24px; }
-  .cart-item { padding: 20px 24px; }
-  .checkout-panel { position: static; }
-}
+.cart-page { padding-top:64px; min-height:100vh; background:var(--off); }
+.cart-header { background:var(--white); padding:40px 48px 32px; border-bottom:1px solid var(--light); }
+.cart-header h1 { font-family:var(--serif); font-size:40px; font-weight:300; }
+.cart-header h1 em { font-style:italic; color:var(--gold); }
+.cart-layout { display:grid; grid-template-columns:1fr 380px; gap:2px; min-height:60vh; }
+.cart-items { background:var(--white); }
+.cart-item { display:grid; grid-template-columns:100px 1fr auto; gap:20px; padding:28px 48px; border-bottom:1px solid var(--light); align-items:start; }
+.cart-item-img { width:100px; aspect-ratio:3/4; object-fit:cover; background:var(--off); }
+.cart-item-name { font-family:var(--serif); font-size:20px; font-weight:400; margin-bottom:6px; line-height:1.2; }
+.cart-item-meta { font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--mid); margin-bottom:16px; }
+.cart-item-qty { display:flex; align-items:center; border:1px solid var(--light); width:fit-content; }
+.ciq-btn { width:36px; height:36px; background:none; border:none; font-size:16px; cursor:pointer; color:var(--dark); display:flex; align-items:center; justify-content:center; }
+.ciq-btn:hover { background:var(--off); }
+.ciq-num { width:36px; text-align:center; font-size:13px; border-left:1px solid var(--light); border-right:1px solid var(--light); line-height:36px; }
+.cart-item-right { display:flex; flex-direction:column; align-items:flex-end; gap:12px; }
+.cart-item-price { font-size:16px; font-weight:500; }
+.cart-remove { background:none; border:none; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; color:var(--mid); cursor:pointer; transition:color 0.3s; font-family:var(--sans); }
+.cart-remove:hover { color:var(--black); }
+.cart-empty { padding:100px 48px; text-align:center; grid-column:1/-1; }
+.cart-empty h2 { font-family:var(--serif); font-size:36px; font-weight:300; margin-bottom:12px; }
+.cart-empty p { font-size:14px; color:var(--mid); margin-bottom:32px; }
+.checkout-panel { background:var(--black); color:var(--white); padding:40px 36px; position:sticky; top:64px; height:fit-content; }
+.checkout-panel h2 { font-family:var(--serif); font-size:24px; font-weight:300; margin-bottom:32px; color:var(--white); }
+.summary-row { display:flex; justify-content:space-between; font-size:13px; color:rgba(255,255,255,0.6); margin-bottom:14px; }
+.summary-total { display:flex; justify-content:space-between; font-size:20px; color:var(--white); margin-top:20px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.12); margin-bottom:32px; }
+.checkout-form { display:none; flex-direction:column; }
+.checkout-form.visible { display:flex; }
+.form-section-title { font-size:9px; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); margin-bottom:16px; margin-top:24px; }
+.form-field { margin-bottom:12px; }
+.form-field label { display:block; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.5); margin-bottom:6px; }
+.form-field input, .form-field textarea { width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); padding:12px 14px; font-size:13px; color:var(--white); outline:none; font-family:var(--sans); transition:border-color 0.25s; }
+.form-field input::placeholder, .form-field textarea::placeholder { color:rgba(255,255,255,0.25); }
+.form-field input:focus, .form-field textarea:focus { border-color:var(--gold); }
+.btn-proceed { width:100%; padding:17px; background:var(--gold); color:var(--white); border:none; font-size:11px; letter-spacing:0.22em; text-transform:uppercase; font-weight:500; font-family:var(--sans); cursor:pointer; transition:background 0.3s; }
+.btn-proceed:hover { background:var(--gold-lt); }
+.btn-proceed:disabled { opacity:0.5; cursor:not-allowed; }
+.secure-note { font-size:10px; color:rgba(255,255,255,0.3); text-align:center; letter-spacing:0.08em; margin-top:8px; }
+@media(max-width:900px){ .cart-layout{grid-template-columns:1fr;} .cart-header{padding:32px 24px 24px;} .cart-item{padding:20px 24px;} .checkout-panel{position:static;} }
 </style>
 </head>
 <body>
 <div id="nav-mount"></div>
-
 <div class="cart-page">
-  <div class="cart-header">
-    <h1>Your <em>Bag</em></h1>
-  </div>
-  <div class="cart-layout" id="cart-layout">
-    <!-- Rendered by JS -->
-  </div>
+  <div class="cart-header"><h1>Your <em>Bag</em></h1></div>
+  <div class="cart-layout" id="cart-layout"></div>
 </div>
-
 <div id="footer-mount"></div>
-
+<script src="/config.js"></script>
 <script src="/app.js"></script>
 <script>
 document.getElementById('nav-mount').innerHTML = renderNav();
 document.getElementById('footer-mount').innerHTML = renderFooter();
 
 const DELIVERY_FEE = 3000;
-let showForm = false;
 
 function renderCart() {
   const items = Cart.get();
   const layout = document.getElementById('cart-layout');
-
   if (!items.length) {
-    layout.innerHTML = `
-      <div class="cart-empty" style="grid-column:1/-1">
-        <h2>Your bag is empty</h2>
-        <p>Nothing here yet. Head to the shop and find something you love.</p>
-        <a href="/shop.html" class="btn btn-dark">Shop the Edit</a>
-      </div>`;
+    layout.innerHTML = `<div class="cart-empty"><h2>Your bag is empty</h2><p>Nothing here yet.</p><a href="/shop.html" class="btn btn-dark">Shop the Edit</a></div>`;
     return;
   }
-
   const subtotal = Cart.total();
   const total = subtotal + DELIVERY_FEE;
-
-  const itemsHTML = items.map(item => `
-    <div class="cart-item">
-      <img class="cart-item-img"
-        src="${item.image || 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=300'}"
-        alt="${item.name}">
-      <div>
-        <div class="cart-item-name">${item.name}</div>
-        <div class="cart-item-meta">Size: ${item.size}</div>
-        <div class="cart-item-qty">
-          <button class="ciq-btn" onclick="updateQty('${item.key}', ${item.quantity - 1})">−</button>
-          <div class="ciq-num">${item.quantity}</div>
-          <button class="ciq-btn" onclick="updateQty('${item.key}', ${item.quantity + 1})">+</button>
-        </div>
-      </div>
-      <div class="cart-item-right">
-        <div class="cart-item-price">${formatPrice(item.price * item.quantity)}</div>
-        <button class="cart-remove" onclick="removeItem('${item.key}')">Remove</button>
-      </div>
-    </div>
-  `).join('');
-
   layout.innerHTML = `
-    <div class="cart-items">${itemsHTML}</div>
+    <div class="cart-items">
+      ${items.map(item => `
+        <div class="cart-item">
+          <img class="cart-item-img" src="${item.image || 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=300'}" alt="${item.name}">
+          <div>
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-meta">Size: ${item.size}</div>
+            <div class="cart-item-qty">
+              <button class="ciq-btn" onclick="updateQty('${item.key}',${item.quantity-1})">−</button>
+              <div class="ciq-num">${item.quantity}</div>
+              <button class="ciq-btn" onclick="updateQty('${item.key}',${item.quantity+1})">+</button>
+            </div>
+          </div>
+          <div class="cart-item-right">
+            <div class="cart-item-price">${formatPrice(item.price * item.quantity)}</div>
+            <button class="cart-remove" onclick="removeItem('${item.key}')">Remove</button>
+          </div>
+        </div>`).join('')}
+    </div>
     <div class="checkout-panel">
       <h2>Order Summary</h2>
       <div class="summary-row"><span>Subtotal</span><span>${formatPrice(subtotal)}</span></div>
       <div class="summary-row"><span>Delivery (Lagos)</span><span>${formatPrice(DELIVERY_FEE)}</span></div>
       <div class="summary-total"><span>Total</span><span>${formatPrice(total)}</span></div>
-
-      <div class="checkout-btn-wrap" id="summary-actions">
-        <button class="btn-proceed" onclick="showCheckoutForm()">Checkout</button>
-        <a href="/shop.html" style="text-align:center;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.4);padding:10px;">Continue Shopping</a>
+      <div id="summary-actions">
+        <button class="btn-proceed" onclick="showForm()">Checkout</button>
+        <a href="/shop.html" style="display:block;text-align:center;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.4);padding:14px;">Continue Shopping</a>
       </div>
-
       <div class="checkout-form" id="checkout-form">
         <div class="form-section-title">Your Details</div>
-        <div class="form-field">
-          <label>Full Name</label>
-          <input type="text" id="f-name" placeholder="Olawale Akomolafe">
-        </div>
-        <div class="form-field">
-          <label>Email</label>
-          <input type="email" id="f-email" placeholder="you@example.com">
-        </div>
-        <div class="form-field">
-          <label>Phone</label>
-          <input type="tel" id="f-phone" placeholder="+234 800 000 0000">
-        </div>
+        <div class="form-field"><label>Full Name *</label><input type="text" id="f-name" placeholder="Your full name"></div>
+        <div class="form-field"><label>Email *</label><input type="email" id="f-email" placeholder="you@example.com"></div>
+        <div class="form-field"><label>Phone *</label><input type="tel" id="f-phone" placeholder="+234 800 000 0000"></div>
         <div class="form-section-title">Delivery Address</div>
-        <div class="form-field">
-          <label>Street Address</label>
-          <input type="text" id="f-address" placeholder="12 Admiralty Way">
-        </div>
-        <div class="form-field">
-          <label>Area / LGA</label>
-          <input type="text" id="f-area" placeholder="Lekki Phase 1">
-        </div>
-        <div class="form-field">
-          <label>City</label>
-          <input type="text" id="f-city" placeholder="Lagos" value="Lagos">
-        </div>
-        <div class="form-field">
-          <label>Order Notes (optional)</label>
-          <textarea id="f-notes" rows="2" placeholder="Any specific instructions…"></textarea>
-        </div>
+        <div class="form-field"><label>Street Address *</label><input type="text" id="f-address" placeholder="12 Admiralty Way"></div>
+        <div class="form-field"><label>Area</label><input type="text" id="f-area" placeholder="Lekki Phase 1"></div>
+        <div class="form-field"><label>City *</label><input type="text" id="f-city" placeholder="Lagos" value="Lagos"></div>
+        <div class="form-field"><label>Notes (optional)</label><textarea id="f-notes" rows="2" placeholder="Any instructions…"></textarea></div>
         <div style="margin-top:20px;">
-          <button class="btn-proceed" id="pay-btn" onclick="submitOrder()">Pay ${formatPrice(total)}</button>
+          <button class="btn-proceed" id="pay-btn" onclick="pay()">Pay ${formatPrice(total)}</button>
           <p class="secure-note">Secured by Paystack · Card, Bank Transfer & USSD</p>
         </div>
       </div>
     </div>`;
 }
 
-function showCheckoutForm() {
+function showForm() {
   document.getElementById('summary-actions').style.display = 'none';
   document.getElementById('checkout-form').classList.add('visible');
 }
 
-function updateQty(key, qty) {
-  Cart.update(key, qty);
-  renderCart();
-}
+function updateQty(key, qty) { Cart.update(key, qty); renderCart(); }
+function removeItem(key) { Cart.remove(key); renderCart(); }
 
-function removeItem(key) {
-  Cart.remove(key);
-  renderCart();
-}
-
-async function submitOrder() {
-  const btn = document.getElementById('pay-btn');
+async function pay() {
   const name = document.getElementById('f-name').value.trim();
   const email = document.getElementById('f-email').value.trim();
   const phone = document.getElementById('f-phone').value.trim();
   const address = document.getElementById('f-address').value.trim();
-  const area = document.getElementById('f-area').value.trim();
   const city = document.getElementById('f-city').value.trim();
-  const notes = document.getElementById('f-notes').value.trim();
+  if (!name || !email || !phone || !address || !city) { showToast('Fill in all required fields'); return; }
 
-  if (!name || !email || !phone || !address || !city) {
-    showToast('Please fill in all required fields');
-    return;
-  }
+  const orderNumber = genOrderNumber();
+  const items = Cart.get();
+  const subtotal = Cart.total();
+  const total = subtotal + DELIVERY_FEE;
 
-  btn.disabled = true;
-  btn.textContent = 'Processing…';
+  // Save order to Supabase first (status: pending)
+  const { error } = await db.createOrder({
+    order_number: orderNumber,
+    customer_name: name,
+    customer_email: email,
+    customer_phone: phone,
+    delivery_address: { street: address, area: document.getElementById('f-area').value, city, country: 'Nigeria' },
+    items: items.map(i => ({ product_id: i.product_id, name: i.name, size: i.size, quantity: i.quantity, price: i.price, line_total: i.price * i.quantity, image: i.image })),
+    subtotal,
+    delivery_fee: DELIVERY_FEE,
+    total,
+    notes: document.getElementById('f-notes').value,
+    status: 'pending',
+  });
 
-  try {
-    const items = Cart.get().map(i => ({
-      product_id: i.product_id,
-      size: i.size,
-      quantity: i.quantity,
-    }));
+  if (error) { showToast('Could not create order. Try again.'); return; }
 
-    const res = await fetch(`${API}/orders`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        customer_name: name,
-        customer_email: email,
-        customer_phone: phone,
-        delivery_address: { street: address, area, city, country: 'Nigeria' },
-        items,
-        notes,
-      }),
-    });
+  // Open Paystack
+  paystackPay({
+    email,
+    amount: total,
+    orderNumber,
+    onSuccess: async (response) => {
+      // Mark as paid
+      await db.updateOrder(orderNumber, { status: 'paid', paystack_reference: response.reference });
+      Cart.clear();
+      window.location.href = `/order-success.html?ref=${orderNumber}`;
+    },
+    onClose: () => showToast('Payment cancelled'),
+  });
+}
 
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Failed to create order');
-
-    // Clear cart and redirect to Paystack
-    Cart.clear();
-    window.location.href = data.payment_url;
-  } catch (e) {
-    showToast(e.message || 'Payment failed. Please try again.');
-    btn.disabled = false;
-    btn.textContent = `Pay ${formatPrice(Cart.total() + DELIVERY_FEE)}`;
-  }
+// Fix paystackPay to accept order_number not id
+async function updateOrder(orderNumber, updates) {
+  const { error } = await new SupabaseQuery(SUPABASE_URL, SUPABASE_SERVICE_KEY, 'orders')
+    .update(updates).eq('order_number', orderNumber);
+  return !error;
 }
 
 renderCart();

@@ -350,6 +350,7 @@
 
 <div id="footer-mount"></div>
 
+<script src="/config.js"></script>
 <script src="/app.js"></script>
 <script>
 document.getElementById('nav-mount').innerHTML = renderNav('shop');
@@ -411,13 +412,9 @@ async function loadProducts() {
   grid.innerHTML = '<div style="grid-column:1/-1;padding:60px;text-align:center;color:var(--mid);font-size:13px;">Loading…</div>';
 
   try {
-    let url = `${API}/products?limit=100`;
-    if (filters.cat) url += `&category=${filters.cat}`;
-    if (filters.gender) url += `&gender=${filters.gender}`;
-
-    const res = await fetch(url);
-    const data = await res.json();
-    allProducts = data.products || [];
+    let qFilters = {};
+    if (filters.cat) qFilters.category = filters.cat;
+    allProducts = await db.getProducts(qFilters);
 
     // Client-side sort
     const sort = document.getElementById('sort-select').value;

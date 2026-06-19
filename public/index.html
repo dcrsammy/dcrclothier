@@ -731,6 +731,7 @@
 
 <div id="footer-mount"></div>
 
+<script src="/config.js"></script>
 <script src="/app.js"></script>
 <script>
   // Render nav + footer
@@ -740,7 +741,7 @@
   // Load featured products
   async function loadFeatured() {
     try {
-      const res = await fetch(`${API}/products?featured=true&limit=4`);
+      
       const data = await res.json();
       const grid = document.getElementById('featured-products');
       if (!data.products?.length) {
@@ -759,11 +760,7 @@
     const email = document.getElementById('sub-email').value.trim();
     if (!email) return showToast('Enter your email address');
     try {
-      await fetch(`${API}/subscribe`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
+      await db.subscribe(email);
       showToast('You\'re on the list ✓');
       document.getElementById('sub-email').value = '';
     } catch { showToast('Something went wrong'); }

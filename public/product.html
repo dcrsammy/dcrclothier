@@ -361,6 +361,7 @@
 
 <div id="footer-mount"></div>
 
+<script src="/config.js"></script>
 <script src="/app.js"></script>
 <script>
 document.getElementById('nav-mount').innerHTML = renderNav('shop');
@@ -380,9 +381,8 @@ async function loadProduct() {
   }
 
   try {
-    const res = await fetch(`${API}/products/${slug}`);
-    if (!res.ok) throw new Error('Not found');
-    product = await res.json();
+    product = await db.getProduct(slug);
+    if (!product) throw new Error('Not found');
 
     document.title = `${product.name} — DCR Clothier`;
     renderProduct(product);
@@ -538,9 +538,8 @@ function bindProductEvents() {
 
 async function loadRelated(category, excludeId) {
   try {
-    const res = await fetch(`${API}/products?category=${category}&limit=4`);
-    const data = await res.json();
-    const related = (data.products || []).filter(p => p.id !== excludeId).slice(0, 4);
+    const allRelated = await db.getProducts({ category, limit: 8 });
+    const related = allRelated.filter(p => p.id !== excludeId).slice(0, 4);
     if (!related.length) return;
 
     const sec = document.createElement('section');

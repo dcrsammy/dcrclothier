@@ -419,9 +419,13 @@ function fmtDate(d) { return new Date(d).toLocaleDateString('en-NG', {day:'numer
 function login() {
   const pw = document.getElementById('pw').value;
   adminToken = pw;
-  fetch(`${API}/admin/stats`, { headers: { 'x-admin-token': pw } })
-    .then(r => {
-      if (!r.ok) throw new Error();
+  // Simple password check client side for admin
+  if (pw !== ADMIN_PASSWORD) {
+    document.getElementById('login-err').style.display = 'block';
+    return;
+  }
+  db.getStats().then(stats => {
+    if (!stats) throw new Error();
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('app').style.display = 'block';
       document.getElementById('dash-date').textContent = new Date().toDateString();
@@ -447,12 +451,10 @@ function goPanel(id) {
 
 async function loadDashboard() {
   try {
-    const [statsR, ordersR] = await Promise.all([
-      fetch(`${API}/admin/stats`, H()),
-      fetch(`${API}/admin/orders`, H()),
+    const [stats, orders] = await Promise.all([
+      db.getStats(),
+      db.getAllOrders(),
     ]);
-    const stats = await statsR.json();
-    const orders = await ordersR.json();
 
     document.getElementById('stat-rev').textContent = fmt(stats.total_revenue || 0);
     document.getElementById('stat-orders').textContent = stats.total_orders || 0;
@@ -479,9 +481,7 @@ async function loadProducts() {
   const body = document.getElementById('products-body');
   body.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:rgba(255,255,255,0.25)">Loading…</td></tr>';
   try {
-    const r = await fetch(`${API}/products?limit=100`);
-    const data = await r.json();
-    const prods = data.products || [];
+    const prods = await db.getAllProducts();
     document.getElementById('prod-count-label').textContent = `${prods.length} Products`;
     body.innerHTML = prods.length
       ? prods.map(p => `
@@ -506,9 +506,7 @@ async function loadOrders() {
   body.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:32px;color:rgba(255,255,255,0.25)">Loading…</td></tr>';
   try {
     const status = document.getElementById('order-filter').value;
-    const url = `${API}/admin/orders${status?'?status='+status:''}`;
-    const r = await fetch(url, H());
-    const orders = await r.json();
+    const orders = await db.getAllOrders(status);
     body.innerHTML = orders.length
       ? orders.map(o => `
           <tr>
@@ -535,10 +533,7 @@ async function loadOrders() {
 
 async function updateOrderStatus(id, status) {
   try {
-    await fetch(`${API}/admin/orders/${id}`, {
-      method:'PATCH', ...H(),
-      body: JSON.stringify({ status })
-    });
+    await db.updateOrder(id, { status });
     toast(`Order updated to: ${status}`);
   } catch(e) { toast('Failed to update'); }
 }
@@ -611,10 +606,8 @@ async function saveProduct() {
   btn.textContent = 'Saving…'; btn.disabled = true;
 
   try {
-    const url = id ? `${API}/admin/products/${id}` : `${API}/admin/products`;
-    const method = id ? 'PATCH' : 'POST';
-    const r = await fetch(url, { method, ...H(), body: JSON.stringify(payload) });
-    if (!r.ok) { const e = await r.json(); throw new Error(e.error); }
+    const { error } = await db.saveProduct(payload, id || null);
+    if (error) throw new Error(JSON.stringify(error));
     toast(id ? 'Product updated ✓' : 'Product created ✓');
     closeModal();
     loadProducts();
@@ -628,7 +621,7 @@ async function saveProduct() {
 async function deleteProduct(id, name) {
   if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
   try {
-    await fetch(`${API}/admin/products/${id}`, { method:'DELETE', ...H() });
+    await db.deleteProduct(id);
     toast('Product deleted');
     loadProducts();
   } catch(e) { toast('Failed to delete'); }
